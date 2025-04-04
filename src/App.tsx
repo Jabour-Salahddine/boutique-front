@@ -16,6 +16,14 @@ import Login from "./pages/Login";
 import Register from "./pages/Register";
 import NotFound from "./pages/NotFound";
 
+
+// --- AJOUTS ---
+// Importer les nouveaux composants Admin et Protection
+import AdminLogin from '@/pages/admin/AdminLogin'; // Assurez-vous que le chemin est correct
+import AdminDashboard from '@/pages/admin/AdminDashboard'; // Assurez-vous que le chemin est correct
+import ProtectedRoute from '@/components/ProtectedRoute'; // Assurez-vous que le chemin est correct
+// --- FIN AJOUTS ---
+
 const queryClient = new QueryClient();
 
 const App = () => (
@@ -36,8 +44,19 @@ const App = () => (
               <Route path="/cart" element={<Cart />} />
               <Route path="/login" element={<Login />} />
               <Route path="/register" element={<Register />} />
+              <Route path="/admin" element={<AdminLogin />} />
+              <Route
+                path="/admin/dashboard"
+                element={
+                  // Utilise ProtectedRoute pour vérifier le rôle 'ADMIN'
+                  // Redirige vers /admin (login admin) si non autorisé
+                  <ProtectedRoute requiredRole="ADMIN" redirectTo="/admin">
+                    <AdminDashboard />
+                  </ProtectedRoute>
+                }
+              />
               <Route path="*" element={<NotFound />} />
-            </Routes>
+           </Routes>
           </BrowserRouter>
         </CartProvider>
       </AuthProvider>
