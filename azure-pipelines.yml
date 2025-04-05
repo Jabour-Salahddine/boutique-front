@@ -1,0 +1,31 @@
+trigger:
+  branches:
+    include:
+      - master  # or 'master', or whichever branch you want to trigger on
+
+pool:
+  vmImage: 'ubuntu-latest'
+
+variables:
+  imageName: ayoubaitbarka/boutiquefront:latest
+
+steps:
+- task: DockerInstaller@0
+  displayName: Install Docker
+
+- task: Docker@2
+  displayName: Build Docker Image
+  inputs:
+    command: build
+    repository: $(imageName)
+    Dockerfile: BOUTIQUE-FRONT/Dockerfile
+    tags: latest
+
+- task: Docker@2
+  displayName: Push Image to Docker Hub
+  inputs:
+    command: push
+    repository: $(imageName)
+    tags: latest
+    containerRegistry: dockerhubservice  # must match your Docker Hub connection name
+
