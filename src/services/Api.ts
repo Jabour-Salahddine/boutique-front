@@ -1,5 +1,5 @@
 // src/services/Api.ts
-import type { Product, Category } from '@/types'; // Assurez-vous que le chemin est correct
+import type { Product, Category,User } from '@/types'; // Assurez-vous que le chemin est correct
 
 const API_BASE_URL = 'http://localhost:8080/boutique_war/api'; // Vérifiez que c'est toujours correct
 
@@ -133,5 +133,54 @@ export const fetchProductsByCategory = async (categoryId: number | string, limit
     return fetchApi<Product[]>(endpoint);
 };
 
+export const getUserProfile = async (token: string): Promise<User> => {
+
+  const response = await fetch('http://localhost:8080/boutique_war/api/users/profile', {
+    method: 'GET',
+    headers: {
+      'Authorization': `Bearer ${token}`, // Token JWT pour l'authentification
+      'Content-Type': 'application/json',
+    },
+  });
+
+  if (!response.ok) {
+    const errorData = await response.json();
+    throw new Error(errorData.message || 'Failed to fetch user profile');
+  }
+
+  return response.json(); // Retourne les informations de l'utilisateur
+};
 
 // Ajoutez ici d'autres fonctions API si nécessaire...
+
+
+export const registerUser = async (
+  nom: string,
+  prenom: string,
+  email: string,
+  telephone: string,
+  password: string
+): Promise<{ token: string }> => {
+  const response = await fetch('http://localhost:8080/boutique_war/api/users', {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+    body: JSON.stringify({
+      nom,
+      prenom,           // Ajout du prénom
+      email,
+      telephone,        // Ajout du téléphone
+      motDePasse: password,
+      role:"CLIENT"
+       // Correspond au champ du backend
+    }),
+  });
+
+  if (!response.ok) {
+    const errorData = await response.json();
+    throw new Error(errorData.message || 'Registration failed');
+  }
+
+  return response.json(); // Doit retourner { token: string }
+};

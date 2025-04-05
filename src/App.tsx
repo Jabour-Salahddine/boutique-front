@@ -15,6 +15,7 @@ import Cart from "./pages/Cart";
 import Login from "./pages/Login";
 import Register from "./pages/Register";
 import NotFound from "./pages/NotFound";
+import  UserProfile  from "./pages/userProfil";
 
 
 // --- AJOUTS ---
@@ -45,6 +46,7 @@ const App = () => (
               <Route path="/login" element={<Login />} />
               <Route path="/register" element={<Register />} />
               <Route path="/admin" element={<AdminLogin />} />
+              <Route path="/userProfail" element={<UserProfile />} />
               <Route
                 path="/admin/dashboard"
                 element={

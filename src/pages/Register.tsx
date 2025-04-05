@@ -1,4 +1,3 @@
-
 import React, { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import Navbar from '@/components/Navbar';
@@ -17,13 +16,18 @@ import {
 import { useAuth } from '@/contexts/AuthContext';
 
 const Register = () => {
-  const [name, setName] = useState('');
+  // États pour les informations de l'utilisateur
+  const [nom, setNom] = useState('');
+  const [prenom, setPrenom] = useState('');
   const [email, setEmail] = useState('');
+  const [telephone, setTelephone] = useState('');
   const [password, setPassword] = useState('');
   const [confirmPassword, setConfirmPassword] = useState('');
+  
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState('');
   
+  // On récupère la méthode register modifiée du contexte Auth
   const { register } = useAuth();
   const navigate = useNavigate();
   
@@ -39,13 +43,12 @@ const Register = () => {
     setIsLoading(true);
     
     try {
-      const success = await register(name, email, password);
-      if (success) {
-        navigate('/');
-      }
+      // On suppose que la méthode register attend : nom, prenom, email, telephone, password
+      await register(nom, prenom, email, telephone, password);
+      navigate('/');
     } catch (err) {
-      setError('An error occurred during registration');
       console.error('Registration error:', err);
+      setError('An error occurred during registration ops');
     } finally {
       setIsLoading(false);
     }
@@ -74,13 +77,25 @@ const Register = () => {
                 
                 <div className="grid gap-4">
                   <div className="grid gap-2">
-                    <Label htmlFor="name">Full Name</Label>
+                    <Label htmlFor="nom">Nom</Label>
                     <Input
-                      id="name"
+                      id="nom"
                       type="text"
-                      placeholder="John Doe"
-                      value={name}
-                      onChange={(e) => setName(e.target.value)}
+                      placeholder="Doe"
+                      value={nom}
+                      onChange={(e) => setNom(e.target.value)}
+                      required
+                    />
+                  </div>
+                  
+                  <div className="grid gap-2">
+                    <Label htmlFor="prenom">Prénom</Label>
+                    <Input
+                      id="prenom"
+                      type="text"
+                      placeholder="John"
+                      value={prenom}
+                      onChange={(e) => setPrenom(e.target.value)}
                       required
                     />
                   </div>
@@ -90,9 +105,21 @@ const Register = () => {
                     <Input
                       id="email"
                       type="email"
-                      placeholder="name@example.com"
+                      placeholder="john.doe@example.com"
                       value={email}
                       onChange={(e) => setEmail(e.target.value)}
+                      required
+                    />
+                  </div>
+                  
+                  <div className="grid gap-2">
+                    <Label htmlFor="telephone">Téléphone</Label>
+                    <Input
+                      id="telephone"
+                      type="text"
+                      placeholder="0123456789"
+                      value={telephone}
+                      onChange={(e) => setTelephone(e.target.value)}
                       required
                     />
                   </div>

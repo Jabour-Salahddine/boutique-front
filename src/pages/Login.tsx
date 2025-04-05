@@ -35,12 +35,13 @@ const Login = () => {
     e.preventDefault();
     setError('');
     setIsLoading(true);
-
+     
     try {
       // Appel de la fonction API centralisée
       const responseData = await loginUser(email, password); // Ex: { token: "jwt.token.string" }
 
       if (responseData && responseData.token) {
+        console.log(responseData);
         // --- CORRECTION ICI ---
         // Si l'API réussit et retourne un token:
         // Appelle la fonction login du contexte AVEC le token
