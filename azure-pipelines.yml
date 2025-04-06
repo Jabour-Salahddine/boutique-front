@@ -2,12 +2,12 @@ trigger:
   branches:
     include:
       - master  # or 'master', or whichever branch you want to trigger on
-
 pool:
+  name: Default
   vmImage: 'ubuntu-latest'
 
 variables:
-  imageName: ayoubaitbarka/boutiquefront:latest
+  imageName: ayoubaitbarka/boutiquefront
 
 steps:
 - task: DockerInstaller@0
@@ -18,7 +18,7 @@ steps:
   inputs:
     command: build
     repository: $(imageName)
-    Dockerfile: BOUTIQUE-FRONT/Dockerfile
+    Dockerfile: Dockerfile
     tags: latest
 
 - task: Docker@2
