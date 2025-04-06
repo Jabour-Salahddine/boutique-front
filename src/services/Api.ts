@@ -1,5 +1,5 @@
 // src/services/Api.ts
-import type { Product, Category,User } from '@/types'; // Assurez-vous que le chemin est correct
+import type { Product, Category,User, CartItem } from '@/types'; // Assurez-vous que le chemin est correct
 
 const API_BASE_URL = 'http://localhost:8080/boutique_war/api'; // Vérifiez que c'est toujours correct
 
@@ -67,6 +67,8 @@ async function fetchApi<T = any>(endpoint: string, options: RequestInit = {}): P
     throw error instanceof Error ? error : new Error('An unexpected error occurred');
   }
 }
+
+
 
 // --- Fonctions spécifiques aux Endpoints ---
 
@@ -151,7 +153,6 @@ export const getUserProfile = async (token: string): Promise<User> => {
   return response.json(); // Retourne les informations de l'utilisateur
 };
 
-// Ajoutez ici d'autres fonctions API si nécessaire...
 
 
 export const registerUser = async (

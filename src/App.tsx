@@ -16,6 +16,7 @@ import Login from "./pages/Login";
 import Register from "./pages/Register";
 import NotFound from "./pages/NotFound";
 import  UserProfile  from "./pages/userProfil";
+import OrderSuccess from './pages/OrderSuccess';
 
 
 // --- AJOUTS ---
@@ -57,6 +58,7 @@ const App = () => (
                   </ProtectedRoute>
                 }
               />
+              <Route path="/order/success" element={<OrderSuccess />} />
               <Route path="*" element={<NotFound />} />
            </Routes>
           </BrowserRouter>
