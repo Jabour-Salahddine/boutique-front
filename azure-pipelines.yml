@@ -18,7 +18,7 @@ steps:
   inputs:
     command: build
     repository: $(imageName)
-    Dockerfile: BOUTIQUE-FRONT/Dockerfile
+    Dockerfile: boutique-front/Dockerfile
     tags: latest
 
 - task: Docker@2
