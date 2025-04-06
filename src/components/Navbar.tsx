@@ -27,7 +27,7 @@ const Navbar = () => {
         <div className="flex items-center justify-between">
           {/* Logo */}
           <Link to="/" className="text-2xl font-bold text-commerce-primary">
-            Commerce<span className="text-commerce-accent">Creek</span>
+            Commerce<span className="text-commerce-accent">shreek</span>
           </Link>
 
           {/* Search - Hidden on mobile */}
