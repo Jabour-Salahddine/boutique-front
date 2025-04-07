@@ -50,7 +50,7 @@ const Navbar = () => {
           {/* Navigation Links - Desktop */}
           <div className="hidden md:flex items-center space-x-6">
             <Link to="/products" className="text-gray-600 hover:text-commerce-primary transition-colors">
-              Products
+              Products 
             </Link>
             <Link to="/categories" className="text-gray-600 hover:text-commerce-primary transition-colors">
               Categories
@@ -61,7 +61,7 @@ const Navbar = () => {
               <div className="relative group">
                 <Button variant="ghost" className="flex items-center">
                   <User className="h-5 w-5 mr-2" />
-                  <span>{user?.name}</span>
+                  <span>{user?.nom}</span>
                 </Button>
                 <div className="absolute right-0 w-48 mt-2 py-2 bg-white rounded shadow-xl opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-300">
                   <Link to="/userProfail" className="block px-4 py-2 text-gray-800 hover:bg-gray-100 transition-colors">

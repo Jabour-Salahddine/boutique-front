@@ -1,34 +1,33 @@
+// src/contexts/AuthContext.tsx
 import React, { createContext, useContext, useState, useEffect, useCallback } from 'react';
-import { jwtDecode } from "jwt-decode"; // Pour jwt-decode v4+
 import { useToast } from '@/hooks/use-toast';
 import { registerUser } from '@/lib/api';
+import { getUserProfile } from '@/services/Api';
 
-// Interfaces utilisateur et payload JWT
-interface User {
-  id: string | number; // L'ID de l'utilisateur (souvent dans le token)
-  email: string;       // L'email (souvent le 'sub' du token)
-  name?: string;       // Le nom (optionnel)
-  role: string;        // Le rôle (optionnel, par exemple 'customer' par défaut)
-}
-
-interface JwtPayload {
-  sub: string;                   // Généralement l'email ou username
-  userId?: string | number;      // Optionnel: ID utilisateur
-  role?: string;                 // Optionnel: Rôle utilisateur
-  name?: string;                 // Optionnel: Nom utilisateur
-  iat?: number;                  // Issued at (timestamp)
-  exp: number;                   // Expiration time (timestamp)
+// Définition de l'interface User utilisée dans l'application
+export interface User {
+  id: string | number;
+  email: string;
+  nom?: string;
+  prenom?: string;
+  telephone?: string;
+  role: string;
 }
 
 interface AuthContextType {
   user: User | null;
-  token: string | null; // Le token JWT
+  token: string | null;
   isAuthenticated: boolean;
-  isLoading: boolean;   // Pour la vérification initiale du token
+  isLoading: boolean;
   login: (token: string) => Promise<void>;
   logout: () => void;
-  register: (nom: string,prenom: string,email: string,
-    telephone: string,password: string) => Promise<void>;
+  register: (
+    nom: string,
+    prenom: string,
+    email: string,
+    telephone: string,
+    password: string
+  ) => Promise<void>;
 }
 
 const AuthContext = createContext<AuthContextType | undefined>(undefined);
@@ -41,58 +40,55 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
   const [isLoading, setIsLoading] = useState(true);
   const { toast } = useToast();
 
-  // Mise à jour de l'état à partir d'un token valide
-  const setAuthState = useCallback((newToken: string) => {
+  /**
+   * Plutôt que de décoder le token avec jwtDecode,
+   * nous stockons le token et utilisons getUserProfile pour récupérer
+   * l'ensemble des informations utilisateur.
+   */
+  const setAuthState = useCallback(async (newToken: string) => {
     try {
-      const decoded = jwtDecode<JwtPayload>(newToken);
-      // Vérification de l'expiration
-      if (decoded.exp * 1000 < Date.now()) {
-        console.warn("Token expired");
-        localStorage.removeItem(AUTH_TOKEN_KEY);
-        setUser(null);
-        setToken(null);
-        return;
-      }
-
-      const currentUser: User = {
-        id: decoded.userId || decoded.sub,
-        email: decoded.sub,
-        role: decoded.role || 'customer',
-        name: decoded.name,
-      };
-
+      // Sauvegarde du token dans le localStorage et dans l'état
       localStorage.setItem(AUTH_TOKEN_KEY, newToken);
       setToken(newToken);
-      setUser(currentUser);
+      
+      // Récupération du profil complet via l'API
+      const fetchedUser = await getUserProfile(newToken);
+      
+      // Mise à jour de l'état utilisateur avec les informations récupérées
+      setUser({
+        id: fetchedUser.id,
+        email: fetchedUser.email,
+        nom: fetchedUser.nom,
+        prenom: fetchedUser.prenom,
+        telephone: fetchedUser.telephone,
+        role: fetchedUser.role,
+      });
     } catch (error) {
-      confirm(error)
-      console.error("Failed to decode or process token:", error);
+      console.error("Failed to fetch user profile:", error);
       localStorage.removeItem(AUTH_TOKEN_KEY);
       setUser(null);
       setToken(null);
     }
   }, []);
 
-  // Vérification initiale lors du chargement de l'app
   useEffect(() => {
     const storedToken = localStorage.getItem(AUTH_TOKEN_KEY);
     if (storedToken) {
+      // Au démarrage, si un token est stocké, on tente de récupérer le profil utilisateur
       setAuthState(storedToken);
     }
     setIsLoading(false);
   }, [setAuthState]);
 
-  // Fonction login qui met à jour l'état et affiche un toast
   const login = useCallback(async (newToken: string): Promise<void> => {
-    setAuthState(newToken);
-    const decoded = jwtDecode<JwtPayload>(newToken);
+    // Mise à jour de l'état d'authentification et récupération du profil
+    await setAuthState(newToken);
     toast({
       title: "Login successful",
-      description: `Welcome back, ${decoded.name || decoded.sub}!`,
+      description: "Welcome back!",
     });
   }, [setAuthState, toast]);
 
-  // Fonction logout qui nettoie l'état et le stockage
   const logout = useCallback(() => {
     setUser(null);
     setToken(null);
@@ -103,7 +99,6 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
     });
   }, [toast]);
 
-  // Fonction register qui appelle l'API d'inscription et connecte l'utilisateur automatiquement
   const register = useCallback(async (
     nom: string,
     prenom: string,
@@ -112,8 +107,9 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
     password: string
   ): Promise<void> => {
     try {
-      const { token } = await registerUser(nom, prenom, email, telephone, password);
-      await login(token);  
+      const { token: newToken } = await registerUser(nom, prenom, email, telephone, password);
+      // Connexion automatique après inscription
+      //await login(newToken);
     } catch (error: any) {
       toast({
         title: 'Registration failed',
@@ -141,7 +137,6 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
   );
 };
 
-// Hook pour accéder au contexte
 export const useAuth = () => {
   const context = useContext(AuthContext);
   if (context === undefined) {

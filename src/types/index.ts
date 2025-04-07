@@ -73,10 +73,14 @@ export interface CartItem {
 // Ce que AuthContext essaie d'extraire : 'sub', 'userId', 'role', 'name'
 // Adaptons pour mieux correspondre au token actuel :
 export interface User {
-  // id?: string | number; // L'ID n'est PAS dans le token actuel, rendez-le optionnel ou supprimez
-  email: string;         // Provient de la claim 'sub' du JWT
-  name?: string;         // Le nom n'est PAS dans le token actuel, rendez-le optionnel
-  roles: string[];       // Provient de la claim 'roles' (une liste/set de strings)
+  id?: string | number; 
+  nom: string,
+  role?:string,
+  prenom: string,
+  email: string,
+  telephone: string,
+  password: string    
+   // Provient de la claim 'roles' (une liste/set de strings)
 }
 // Note : Vous devrez peut-être adapter AuthContext pour gérer `roles: string[]` au lieu de `role: string`
 

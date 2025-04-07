@@ -24,6 +24,7 @@ import OrderSuccess from './pages/OrderSuccess';
 import AdminLogin from '@/pages/admin/AdminLogin'; // Assurez-vous que le chemin est correct
 import AdminDashboard from '@/pages/admin/AdminDashboard'; // Assurez-vous que le chemin est correct
 import ProtectedRoute from '@/components/ProtectedRoute'; // Assurez-vous que le chemin est correct
+import ProductManager from "./pages/admin/ManageProducts";
 // --- FIN AJOUTS ---
 
 const queryClient = new QueryClient();
@@ -48,6 +49,7 @@ const App = () => (
               <Route path="/register" element={<Register />} />
               <Route path="/admin" element={<AdminLogin />} />
               <Route path="/userProfail" element={<UserProfile />} />
+              <Route path="/AdminProduct" element={<ProductManager/>}/>
               <Route
                 path="/admin/dashboard"
                 element={
