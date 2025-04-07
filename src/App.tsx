@@ -16,6 +16,7 @@ import Login from "./pages/Login";
 import Register from "./pages/Register";
 import NotFound from "./pages/NotFound";
 import  UserProfile  from "./pages/userProfil";
+import OrderSuccess from './pages/OrderSuccess';
 
 
 // --- AJOUTS ---
@@ -23,6 +24,8 @@ import  UserProfile  from "./pages/userProfil";
 import AdminLogin from '@/pages/admin/AdminLogin'; // Assurez-vous que le chemin est correct
 import AdminDashboard from '@/pages/admin/AdminDashboard'; // Assurez-vous que le chemin est correct
 import ProtectedRoute from '@/components/ProtectedRoute'; // Assurez-vous que le chemin est correct
+import ProductManager from "./pages/admin/ManageProducts";
+import CategoryManager from "./pages/Catégories/catégories";
 // --- FIN AJOUTS ---
 
 const queryClient = new QueryClient();
@@ -47,6 +50,8 @@ const App = () => (
               <Route path="/register" element={<Register />} />
               <Route path="/admin" element={<AdminLogin />} />
               <Route path="/userProfail" element={<UserProfile />} />
+              <Route path="/AdminProduct" element={<ProductManager/>}/>
+              <Route path="/categoriesManger" element={<CategoryManager />} />
               <Route
                 path="/admin/dashboard"
                 element={
@@ -57,6 +62,7 @@ const App = () => (
                   </ProtectedRoute>
                 }
               />
+              <Route path="/order/success" element={<OrderSuccess />} />
               <Route path="*" element={<NotFound />} />
            </Routes>
           </BrowserRouter>
