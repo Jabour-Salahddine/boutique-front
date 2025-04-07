@@ -1,5 +1,5 @@
 // src/services/Api.ts
-import type { Product, Category, User } from '@/types'; // Assurez-vous que le chemin est correct
+import type { Product, Category, User, /*ProductPayload*/ } from '@/types'; // Assurez-vous que le chemin est correct
 
 const API_BASE_URL = 'http://localhost:8080/boutique_war/api'; // Vérifiez que c'est toujours correct
 
@@ -195,6 +195,10 @@ export const loginAdmin = async (email: string, password: string): Promise<{ tok
 
 // --- NOUVELLES FONCTIONS POUR LA GESTION DES PRODUITS (CRUD) ---
 
+
+
+
+
 /**
  * Récupère tous les produits depuis le backend (pour l'admin).
  * @returns Une promesse résolue avec un tableau de produits.
@@ -253,3 +257,7 @@ export const getClientsWithOrderCount = async (token: string): Promise<
     { clientId: string | number; clientName: string; clientEmail: string; orderCount: number }[]
   >('/clients/with-order-count'); // Assurez-vous que cet endpoint existe dans votre backend
 };
+
+
+
+

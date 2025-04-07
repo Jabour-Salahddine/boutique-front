@@ -55,8 +55,9 @@ const ProductManager: React.FC = () => {
     setForm({ ...initialProduct });
     setEditingId(null);
   };
-
-  const handleSubmit = async (e: React.FormEvent) => {
+  
+  
+  const handleSubmit = async (e: React.FormEvent) => {  // ici 
     e.preventDefault();
     try {
       if (editingId) {
@@ -70,6 +71,60 @@ const ProductManager: React.FC = () => {
       console.error(err);
     }
   };
+  
+
+
+
+  /*
+  // correction :
+
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    try {
+      // --- CORRECTION : Créer un payload simplifié ---
+      const productPayload = {
+        nom: form.nom,
+        description: form.description,
+        prix: form.prix,
+        quantiteStock: form.quantiteStock,
+        imageUrl: form.imageUrl,
+        rating: form.rating, // Assurez-vous que rating est bien dans le formulaire ou gérez sa valeur par défaut
+        featured: form.featured,
+        // Envoyer SEULEMENT l'ID de la catégorie dans un objet imbriqué simple
+        // que Jackson peut mapper à la relation @ManyToOne
+        categorie: {
+          id: form.categorie.id // Important: l'objet categorie doit avoir un id
+        }
+        // Ne PAS inclure form.categorie.produits ou autres champs de categorie ici
+      };
+      // --- FIN CORRECTION ---
+
+      if (!productPayload.categorie.id) {
+          alert("Please select a category."); // Validation simple
+          return;
+      }
+
+      console.log("Payload sent to backend:", productPayload); // Pour déboguer le payload
+
+      if (editingId) {
+        // Pour l'update, on peut envoyer l'ID du produit en plus si l'API l'attend
+        await updateProduct(editingId, productPayload, token);
+      } else {
+        await createProduct(productPayload, token);
+      }
+      closeModal();
+      fetchData();
+    } catch (err) {
+      console.error("Error submitting product:", err); // Log détaillé de l'erreur
+      // Afficher une erreur plus user-friendly si possible
+      alert("Error saving product. Check console for details.");
+    }
+  };
+  */
+//----------------
+
+
+
 
   const handleDelete = async (id: number) => {
     if (confirm("Confirmer la suppression ?")) {

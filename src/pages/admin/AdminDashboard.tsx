@@ -62,7 +62,7 @@ const AdminDashboard = () => {
             </div>
           </Link>
 
-          <Link to="/admin/categories">
+          <Link to="/categoriesManger">
             {" "}
             {/* Définir cette route plus tard */}
             <div className="bg-white p-6 rounded-lg shadow hover:shadow-lg transition-shadow cursor-pointer flex items-center gap-4">

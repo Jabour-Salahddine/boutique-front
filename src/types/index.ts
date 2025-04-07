@@ -133,3 +133,19 @@ export interface Paiement {
     transactionId?: string; // ID de session Stripe par exemple
     valide: boolean;
 }
+
+
+// ajouter pour add delete update product : 
+
+export interface ProductPayload {
+  nom: string;
+  description: string;
+  prix: number;
+  quantiteStock: number;
+  imageUrl: string;
+  rating?: number; // Rendre optionnel si non toujours fourni
+  featured: boolean;
+  categorie: { id: number }; // SEULEMENT l'ID de catégorie
+  // Ne pas inclure 'avis' si non géré par le formulaire
+}
+
